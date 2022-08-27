@@ -1,40 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import db from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 function Detail() {
+  const { uid } = useParams();
+  const [movie, setMovie] = useState();
+
+  useEffect(() => {
+    async function fetchSingleData() {
+      const docRef = doc(db, 'movies', uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setMovie(docSnap.data());
+      } else {
+      }
+    }
+    fetchSingleData();
+  }, []);
   return (
     <Container>
-      <Background>
-        <img src='/images/rouff.jpeg' />
-      </Background>
-      <ImgTitle>
-        <img
-          src='https://imgs.search.brave.com/BuaKICKPVPzYMlhX7TdWqEjnnKwJNNzspdxKed_ht1k/rs:fit:474:225:1/g:ce/aHR0cHM6Ly90c2Uz/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5i/M0h3cmp5TTVvNXVi/azRGVGlYdktBSGFI/YSZwaWQ9QXBp'
-          alt=''
-        />
-      </ImgTitle>
-      <Controls>
-        <PlayButton>
-          <img src='/images/play-icon-black.png' />
-          <span>PLAY</span>
-        </PlayButton>
-        <TrailerButton>
-          <img src='/images/play-icon-white.png' />
-          <span>TRAILER</span>
-        </TrailerButton>
-        <AddButton>
-          <span>+</span>
-        </AddButton>
-        <GroupButton>
-          <img src='/images/group-icon.png' />
-        </GroupButton>
-      </Controls>
-      <SubTitle>2018 . 7s . Family, Fantasy, Kids, Animation</SubTitle>
-      <Description>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nisi
-        eaque, iure facere accusantium commodi minima enim eos iusto
-        consequuntur!
-      </Description>
+      {movie && (
+        <>
+          <Background>
+            <img src={movie.backgroundImg} />
+          </Background>
+          <ImgTitle>
+            <img src={movie.titleImg} alt='' />
+          </ImgTitle>
+          <Controls>
+            <PlayButton>
+              <img src='/images/play-icon-black.png' />
+              <span>PLAY</span>
+            </PlayButton>
+            <TrailerButton>
+              <img src='/images/play-icon-white.png' />
+              <span>TRAILER</span>
+            </TrailerButton>
+            <AddButton>
+              <span>+</span>
+            </AddButton>
+            <GroupButton>
+              <img src='/images/group-icon.png' />
+            </GroupButton>
+          </Controls>
+          <SubTitle>{movie.subTitle}</SubTitle>
+          <Description>{movie.description}</Description>
+        </>
+      )}
     </Container>
   );
 }
