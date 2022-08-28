@@ -149,6 +149,9 @@ const NavMenu = styled.div`
         opacity: 1;
       }
     }
+    @media (max-width: 480px) {
+      display: none;
+    }
   }
 `;
 

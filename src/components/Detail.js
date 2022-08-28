@@ -91,6 +91,7 @@ const ImgTitle = styled.div`
 
 const Controls = styled.button`
   display: flex;
+  flex-wrap: wrap;
   background: transparent;
   border: none;
   align-items: center;
